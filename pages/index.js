@@ -1,42 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {db} from '../firebase'
-import {useRouter} from 'next/router'
-
-import { collection, addDoc, getDoc, getDocs, deleteDoc, doc } from 'firebase/firestore'
-
 
 function Home() {
-  const [data, setData] = useState([]);
-  const router = useRouter();
-
-  const databaseRef = collection(db, 'Students');
-
-  useEffect(() => {
-    getData();
-  }, [data])
-  
-  const getData = async () => {
-    await getDocs(databaseRef)
-    .then((response) => {
-      setData(response.docs.map((data)=>{
-        return {...data.data(), id:data.id}
-      }));
-    })
-  }
 
   const updateStudent = () => {
     alert('update');
   }
 
   const deleteStudent = async (id) => {
-    let fieldToDelete = doc(db, 'Students', id);
-    await deleteDoc(fieldToDelete)
-    .then(() => {
-      alert('Data Deleted')
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+
   }
   
   return (
@@ -56,22 +27,18 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            { data.map((item) => (
-              <tr key={item.id} className='bg-white h-12 border-b border-gray-400'>
-                <td>{item.name}</td>
-                <td>{item.marks}</td>
+              <tr className='bg-white h-12 border-b border-gray-400'>
+                <td>John</td>
+                <td>123</td>
                 <td>
                   <button
                     className='bg-green-400 py-2 px-5 rounded-md mr-2'
-                    onClick={() => router.push("/student/update/" + item.id)}
                   >Update</button>
                   <button
                     className='bg-red-400 py-2 px-5 rounded-md'
-                    onClick={() => deleteStudent(item.id) }
                   >Delete</button>
                 </td>
-              </tr> 
-            )) }
+              </tr>
             
             
           </tbody>          
